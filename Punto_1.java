@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
 
@@ -37,10 +39,19 @@ public class Punto_1 {
 
         System.out.print("Seleccione una opción: ");
         int op = sc.nextInt();
-        
-        // LLamar al método
+
+        // LLamar al método sumaFilasPila
         if (op == 1) {
             sumaFilasPila(matriz);
+
+            // LLamar al método sumaColumnasCola
+        } else if (op == 2) {
+            sumaColumnasCola(matriz);
+            // LLamar al método Factorial
+        } else if (op == 3) {
+            Factorial(n);
+        } else if (op == 4) {
+            ordenarCola(matriz);
         }
 
     }
@@ -68,4 +79,103 @@ public class Punto_1 {
         }
     }
 
+    public static void sumaColumnasCola(int[][] matriz) {
+
+        // Se crea una cola de enteros.
+        // Queue no se puede crear directamente porque es una interfaz.
+        // por eso usamos LinkedList que sí implementa Queue.
+        Queue<Integer> cola = new LinkedList<>();
+
+        // Recorre las columnas de la matriz.
+        // matriz[0].length = cantidad de columnas.
+        // j representa el número de columna.
+        for (int j = 0; j < matriz[0].length; j++) {
+
+            // Variable donde se guardará la suma de una columna.
+            int suma = 0;
+
+            // Recorre las filas de la matriz.
+            // matriz.length = cantidad de filas.
+            // i representa el número de fila.
+            for (int i = 0; i < matriz.length; i++) {
+
+                // Va sumando el valor que está en la fila i y columna j
+                // matriz[i][j]
+                suma += matriz[i][j];
+            }
+
+            // Cuando termina de sumar toda la columna.
+            // guarda el resultado en la cola.
+            cola.offer(suma);
+        }
+
+        System.out.println("Suma de columnas (COLA):");
+        // se recorren los elementos de la cola.
+        while (!cola.isEmpty()) {
+            // remove() saca e imprime cada valor en orden de llegada (FIFO).
+            System.out.println(cola.remove());
+        }
+
+    }
+
+    public static void Factorial(int n) {
+
+        // Variable donde se guarda el resultado, se inicia en 1 porque el factorial.
+        // multiplica
+        int fact = 1;
+
+        // Ciclo desde 1 hasta n
+        for (int i = 1; i <= n; i++) {
+            fact = fact * i; // Multiplica acumulativamente.
+        }
+
+        // Mostrar resultado
+        System.out.println("Factorial de " + n + " es: " + fact);
+
+    }
+
+    public static void ordenarCola(int[][] matriz) {
+
+        Queue<Integer> cola = new LinkedList<>();
+
+        // Llenar la cola con los valores de la matriz.
+        for (int i = 0; i < matriz.length; i++) {
+
+            for (int j = 0; j < matriz[i].length; j++) {
+                cola.offer(matriz[i][j]);
+            }
+        }
+
+        System.out.println("Cola ordenada de mayor a menor:");
+
+        // Mientras la cola tenga elementos.
+        while (!cola.isEmpty()) {
+
+            int mayor = cola.peek(); // tomar el primero como referencia.
+
+            // Buscar el mayor.
+            for (int num : cola) {
+                if (num > mayor) {
+                    mayor = num;
+                }
+            }
+
+            // Imprimir el mayor.
+            System.out.println(mayor);
+
+            // Eliminar SOLO una vez ese mayor de la cola.
+            boolean eliminado = false;
+            int size = cola.size();
+
+            for (int i = 0; i < size; i++) {
+                int num = cola.remove();
+
+                if (num == mayor && !eliminado) {
+                    eliminado = true; // Elimina solo uno.
+                } else {
+                    cola.offer(num); // Vuelve a meter los demás.
+                }
+            }
+        }
+    }
 }
